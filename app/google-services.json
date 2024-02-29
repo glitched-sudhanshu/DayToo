@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "69400683831",
+    "project_id": "daytoo-31a8c",
+    "storage_bucket": "daytoo-31a8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69400683831:android:0535b49e4709624336e6b2",
+        "android_client_info": {
+          "package_name": "com.example.daytoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKhlZgrCdcvyKkh_-XNCtLKraHvpzLG0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
