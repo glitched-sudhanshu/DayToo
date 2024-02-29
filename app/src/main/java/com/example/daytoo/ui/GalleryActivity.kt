@@ -2,6 +2,8 @@ package com.example.daytoo.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,14 +47,21 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.AspectRatioFrameLayout
+import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
 import com.example.daytoo.R
 import com.example.daytoo.models.GalleryData
@@ -254,7 +264,7 @@ class GalleryActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
+    @androidx.annotation.OptIn(UnstableApi::class) @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun ShowGalleryItem(galleryData: List<GalleryData>) {
         val pagerState = rememberPagerState() { galleryData.size }
@@ -283,13 +293,56 @@ class GalleryActivity : ComponentActivity() {
                         .wrapContentSize()
                         .align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AsyncImage(
-                        model = galleryData[index].url, contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(500.dp)
-                            .clip(RoundedCornerShape(5))
-                    )
+                    Log.d("ShowGalleryItem", "ShowGalleryItem: ${galleryData[index].type }")
+                    if(galleryData[index].type == "image") {
+                        Log.d("ShowGalleryItem", "ShowGalleryItem: 1")
+                        AsyncImage(
+                            model = galleryData[index].url, contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(500.dp)
+                                .clip(RoundedCornerShape(5))
+                        )
+                    }
+                    else {
+                        val context = LocalContext.current
+                        val exoPlayer = remember {
+                            ExoPlayer.Builder(context).build().apply {
+                                setMediaItem(MediaItem.fromUri(galleryData[index].url))
+                                repeatMode = ExoPlayer.REPEAT_MODE_ALL
+                                playWhenReady = true
+                                volume = 1f
+                                prepare()
+                                play()
+                            }
+                        }
+                        DisposableEffect(Unit) {
+                            onDispose {
+                                exoPlayer.release()
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(500.dp)
+                                .clip(RoundedCornerShape(5))){
+                            AndroidView(
+                                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(5)),
+                                factory = {
+                                    PlayerView(context).apply {
+                                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                                        setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
+                                        setKeepContentOnPlayerReset(true)
+                                        player = exoPlayer
+                                        useController = false
+                                        FrameLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                    }
                     Spacer(modifier = Modifier.height(30.dp))
                     Text(
                         text = galleryData[index].title,
@@ -328,7 +381,7 @@ class GalleryActivity : ComponentActivity() {
                                     val data = document.data
                                     val fetchedData = GalleryData(
                                         title = (data?.get("title") as String),
-                                        type = "image",
+                                        type = (data["type"] as String),
                                         url = (data["url"] as String)
                                     )
                                     val cn =
