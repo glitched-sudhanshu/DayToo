@@ -298,6 +298,7 @@ class GalleryActivity : ComponentActivity() {
                     ClickableText(
                         text = AnnotatedString("NO"),
                         modifier = Modifier
+                            .padding(1.dp)
                             .shadow(
                                 color = DarkRed,
                                 offsetX = 20.dp,
