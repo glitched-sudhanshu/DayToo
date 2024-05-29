@@ -8,6 +8,7 @@ on:
         required: true
         default: 'Manual Debug Build'
         description: 'Release Notes'
+    branches: [ "main", "develop", "master" ]
 
 jobs:
   build:
