@@ -16,18 +16,21 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,6 +52,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -66,10 +71,11 @@ import coil.compose.AsyncImage
 import com.example.daytoo.R
 import com.example.daytoo.models.GalleryData
 import com.example.daytoo.ui.theme.CookieMonster
+import com.example.daytoo.ui.theme.DarkRed
 import com.example.daytoo.ui.theme.DayTooTheme
 import com.example.daytoo.ui.theme.Grey
-import com.example.daytoo.ui.theme.LightRed
-import com.example.daytoo.ui.theme.WineRed
+import com.example.daytoo.ui.theme.HoneyBee
+import com.example.daytoo.ui.theme.shadow
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
 
@@ -121,6 +127,7 @@ class GalleryActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun ShowGallery() {
         var showFirstMessage by remember { mutableStateOf(true) }
@@ -260,6 +267,67 @@ class GalleryActivity : ComponentActivity() {
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp
                 )
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()){
+                    ClickableText(
+                        text = AnnotatedString("YESS"),
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = HoneyBee.regular,
+                            textAlign = TextAlign.Center
+                        ),
+                        onClick = {
+                            Toast.makeText(this@GalleryActivity, "wuhuuuu", Toast.LENGTH_SHORT).show()
+                        },
+                        modifier = Modifier
+                            .shadow(
+                                color = DarkRed,
+                                offsetX = 20.dp,
+                                offsetY = 20.dp,
+                                spread = 2.dp,
+                                borderRadius = 20.dp,
+                                blurRadius = 10.dp,
+                            )
+                            .background(
+                                shape = RoundedCornerShape(10.dp),
+                                color = Color.White,
+                            )
+                            .padding(4.dp),
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    ClickableText(
+                        text = AnnotatedString("NO"),
+                        modifier = Modifier
+                            .shadow(
+                                color = DarkRed,
+                                offsetX = 20.dp,
+                                offsetY = 20.dp,
+                                spread = 2.dp,
+                                borderRadius = 20.dp,
+                                blurRadius = 10.dp,
+                            )
+                            .background(
+                                shape = RoundedCornerShape(10.dp),
+                                color = Color.White,
+                            )
+                            .padding(4.dp),
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = HoneyBee.regular,
+                            textAlign = TextAlign.Center
+                        ),
+                        onHover = {},
+                        onClick = {
+                            Toast.makeText(this@GalleryActivity, "Okayiii", Toast.LENGTH_SHORT).show()
+                            val pref = applicationContext.getSharedPreferences(
+                                "MyPref",
+                                0
+                            ) // 0 - for private mode
+                            pref.edit().putBoolean("Open_App", false).apply()
+                        }
+                    )
+                }
             }
         }
     }
@@ -326,7 +394,9 @@ class GalleryActivity : ComponentActivity() {
                                 .size(500.dp)
                                 .clip(RoundedCornerShape(5))){
                             AndroidView(
-                                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(5)),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(5)),
                                 factory = {
                                     PlayerView(context).apply {
                                         resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT

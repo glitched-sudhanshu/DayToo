@@ -60,6 +60,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val pref = applicationContext.getSharedPreferences(
+                        "MyPref",
+                        0
+                    )
+                    val openApp = pref.getBoolean("Open_App", true)
+                    if (!openApp) finish()
                     if (greet) Greeting("Ananya", showAskOut = {
                         greet = false
                         askOut = true
@@ -82,11 +88,11 @@ class MainActivity : ComponentActivity() {
         }
 
         id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-        if(id != "5557b08b6338cd58"){
+        if (id != "5557b08b6338cd58") {
             title = "Hii Sudhanshu"
             msg = "Usne App Khola"
             FirebaseMessaging.getInstance().subscribeToTopic(TOPIC2)
-        }else{
+        } else {
             FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
         }
         askNotificationPermission()
@@ -97,12 +103,12 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            if(notificationSent) {
+            if (notificationSent) {
                 PushNotification(
                     NotificationData(title, msg),
-                    if(id != "5557b08b6338cd58") TOPIC else TOPIC2
+                    if (id != "5557b08b6338cd58") TOPIC else TOPIC2
                 ).also {
-//                    sendNotification(it)
+                    sendNotification(it)
                 }
                 notificationSent = false
             }
@@ -125,12 +131,12 @@ class MainActivity : ComponentActivity() {
                 ) ==
                 PackageManager.PERMISSION_GRANTED
             ) {
-                if(notificationSent){
+                if (notificationSent) {
                     PushNotification(
                         NotificationData(title, msg),
-                        if(id != "5557b08b6338cd58") TOPIC else TOPIC2
+                        if (id != "5557b08b6338cd58") TOPIC else TOPIC2
                     ).also {
-//                        sendNotification(it)
+                        sendNotification(it)
                     }
                     notificationSent = false
                 }
@@ -139,22 +145,22 @@ class MainActivity : ComponentActivity() {
                 // Directly ask for the permission
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
-        }else{
-            if(notificationSent){
-            PushNotification(
-                NotificationData(title, msg),
-                if(id != "5557b08b6338cd58") TOPIC else TOPIC2
-            ).also {
-//                sendNotification(it)
+        } else {
+            if (notificationSent) {
+                PushNotification(
+                    NotificationData(title, msg),
+                    if (id != "5557b08b6338cd58") TOPIC else TOPIC2
+                ).also {
+                    sendNotification(it)
+                }
+                notificationSent = false
             }
-            notificationSent = false
-        }
 
         }
     }
 
     private fun sendNotification(notification: PushNotification) {
-        val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
             throwable.printStackTrace()
         }
         CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
