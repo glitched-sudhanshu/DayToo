@@ -28,6 +28,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.example.daytoo.Constants.Companion.LaundiyaKaNaam
 import com.example.daytoo.api.RetrofitInstance
 import com.example.daytoo.models.NotificationData
 import com.example.daytoo.ui.GalleryActivity
@@ -41,7 +42,7 @@ var notificationSent = true
 class MainActivity : ComponentActivity() {
 
     private var id = ""
-    private var title = "Hii Ananya"
+    private var title = "Hii $LaundiyaKaNaam"
     private var msg = "Usne App Khola"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +67,7 @@ class MainActivity : ComponentActivity() {
                     )
                     val openApp = pref.getBoolean("Open_App", true)
                     if (!openApp) finish()
-                    if (greet) Greeting("Ananya", showAskOut = {
+                    if (greet) Greeting(LaundiyaKaNaam, showAskOut = {
                         greet = false
                         askOut = true
                         decision = false

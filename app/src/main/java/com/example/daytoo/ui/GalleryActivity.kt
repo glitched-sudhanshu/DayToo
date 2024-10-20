@@ -12,6 +12,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,8 +30,10 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -255,6 +258,7 @@ class GalleryActivity : ComponentActivity() {
         } else {
             Column(
                 modifier = Modifier
+                    .verticalScroll(rememberScrollState())
                     .fillMaxSize()
                     .background(Grey)
                     .padding(all = 16.dp),
@@ -262,16 +266,16 @@ class GalleryActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Darasal I want to ask you out for a date! \nUmmm next week 7,8,9 ko moksha hai... toh kyaaa tu aaegi kisi ek din bhi?\n\nIk ik ye baat me text pe bhi puch sakta thaaaaa... but mujhe ye cheez thore ache tareeke se puchni thi... or call apni aaj kal ho nahi rahi... or me thora excited hu or chahta bhi hu ki tu aae... toh isiliye thora special karne ke liye hui hui hui... btw gallery vala plan phele se thaaaa... bss timing ye choose karli... I GUESS it's been a long time ki ese dhang se baat cheet nahi hui...\n\nIk tu meerut me hogi... but still it's just I wanted to ask you out, so that's why\n\n\nAnd please otherwise matt lena kuch... \n\n\nAnd just a disclaimer all this is irrespective of your decision yeh toh bss tujhe hepi hepi feel karane ke liye tha... ye me phele se socah hua thaaa... Hope tujhe acha laga ho\nHehe bbye",
+                    text = "Darasal I want to ask you out for a date! \nUmmm next week 25,26,27 ko moksha hai... toh kyaaa tu aaegi kisi ek din bhi?\n\nIk ik ye baat me text pe bhi puch sakta thaaaaa... but mujhe ye cheez thore ache tareeke se puchni thi... or call apni aaj kal ho nahi rahi... or me thora excited hu or chahta bhi hu ki tu aae... toh isiliye thora special karne ke liye hui hui hui... btw gallery vala plan phele se thaaaa... bss timing ye choose karli... I GUESS it's been a long time ki ese dhang se baat cheet nahi hui...\n\nIk tu blr me hogi... but still it's just I wanted to ask you out, so that's why\n\n\nAnd please otherwise matt lena kuch... \n\n\nAnd just a disclaimer all this is irrespective of your decision yeh toh bss tujhe hepi hepi feel karane ke liye tha... ye me phele se socah hua thaaa... Hope tujhe acha laga ho\nHehe bbye",
                     fontFamily = FontFamily.Monospace,
                     textAlign = TextAlign.Center,
-                    fontSize = 30.sp
+                    fontSize = 24.sp
                 )
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()){
                     ClickableText(
                         text = AnnotatedString("YESS"),
                         style = TextStyle(
-                            fontSize = 24.sp,
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = HoneyBee.regular,
                             textAlign = TextAlign.Center
@@ -312,7 +316,7 @@ class GalleryActivity : ComponentActivity() {
                             )
                             .padding(4.dp),
                         style = TextStyle(
-                            fontSize = 24.sp,
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = HoneyBee.regular,
                             textAlign = TextAlign.Center
